@@ -1,0 +1,106 @@
+lobby:
+   # permet principalement de prouver que le joueur as lu les regles
+   # n'accepte que la commande de scan en mode anonyme
+   # nétoyage automatique des commandes
+   # admin non disponible
+   network: 
+    - trial_head
+   prom:
+      etc:
+         cleaner: |
+            TXT:
+            30s
+         motd: |
+            TXT:
+            ```markdown
+            HacknetOS Roleplay Server
+            =========================
+            
+               Firstly, this is not a hacking group, but a server on the theme of the game hacknet, to join the server and being able to talk to other peoples, you need to understand the basic concept of the game.
+            
+            ## Rules and Guidelines:
+            
+            1.  Be kind and mature.
+            2.  No excessively cursing.
+            3.  No trolling, spam, advertisements, offense, racism of any type.
+            4.  No adult, explicit, controversal, degrading or disturbing content.
+            5.  No unofficial bots is not allowed without administrative approval.
+            6.  No agree to start here, use scan instead to agree and start your journey.
+            7.  No channel hopping. Channel hopping is switching channels in quick manner.
+            8.  No begging for help in the chat, use sav channel if you have a problem.
+            9.  No real hacking stuff here, this is a roleplay server about hacknet.
+            10. No use of everyone/here ping without permission.
+            11. No text walls or a large paragraphs of text.
+            12. Do not cause a nuisance in the server.
+            13. Do not argue with staff.
+            
+               To comply to the rules and start your journey throught the server simply type agree```
+      listener: |
+        TXT:
+        [anon]
+        nmap
+        scan
+    sys:
+      init: |
+        TXT:
+        portguard
+        cleanall
+        motd
+        cleaner
+        listener
+        network
+      portguard: "SRV:portguard"
+      cleanall: "SRV:cleanall"
+      motd: "SRV:motd"
+      cleaner: "SRV:cleaner"
+      listener: "SRV:listener"
+      network: "SRV:network"
+trial_head:
+  # trial_head permet de prouver l'utilisation de porthack et de scan
+  network:
+   - trial_chain
+  prom:
+    etc:
+      cleaner: |
+        TXT:
+        30s
+      motd: |
+        TXT:
+        ```markdown
+        HacknetOS Roleplay Server
+        =========================
+        
+          Firstly, this is not a hacking group, but a server on the theme of the game hacknet, to join the server and being able to talk to other peoples, you need to understand the basic concept of the game.
+        
+        ## Rules and Guidelines:
+        
+        1.  Be kind and mature.
+        2.  No excessively cursing.
+        3.  No trolling, spam, advertisements, offense, racism of any type.
+        4.  No adult, explicit, controversal, degrading or disturbing content.
+        5.  No unofficial bots is not allowed without administrative approval.
+        6.  No agree to start here, use scan instead to agree and start your journey.
+        7.  No channel hopping. Channel hopping is switching channels in quick manner.
+        8.  No begging for help in the chat, use sav channel if you have a problem.
+        9.  No real hacking stuff here, this is a roleplay server about hacknet.
+        10. No use of everyone/here ping without permission.
+        11. No text walls or a large paragraphs of text.
+        12. Do not cause a nuisance in the server.
+        13. Do not argue with staff.
+        
+          To comply to the rules and start your journey throught the server simply type agree```
+      listener: |
+        TXT:
+        [anon]
+        nmap
+        scan
+        help
+trial_chain:
+  # trial_head permet de prouver l'utilisation des commandes de gestion de fichier
+  network:
+   - trial_tail
+trial_tail:
+  # trial_head permet de prouver l'utilisation des commandes de hack de port
+  network:
+   - irc
+   - sav

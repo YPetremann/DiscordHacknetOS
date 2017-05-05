@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import discord
+import asyncio
+import Hacknet
+import config
+client = discord.Client()
+
+@client.event
+async def on_ready():
+	print("ready")
+	#~ serv = await client.create_server("HacknetOSRP")
+	#~ print(serv.name)
+	#~ for server in client.servers:
+		#~ if server.name == "HacknetOSRP":
+			#~ for member in server.members:
+				#~ if member.name == "THAUI":
+					#~ for role in server.roles:
+						#~ print(role.name, role.permissions.value)
+						#~ await client.add_roles(member, role)
+					#~ print([role.name for role in member.roles])
+channels = {
+	"talk" : ["irc"],
+}
+
+welcome = """```markdown
+HacknetOS Roleplay Server
+=========================
+
+  Firstly, this is not a hacking group, but a server on the theme of the game hacknet, to join the server and being able to talk to other peoples, you need to understand the basic concept of the game.
+
+## Rules and Guidelines:
+
+1.  Be kind and mature.
+2.  No excessively cursing.
+3.  No trolling, spam, advertisements, offense, racism of any type.
+4.  No adult, explicit, controversal, degrading or disturbing content.
+5.  No unofficial bots is not allowed without administrative approval.
+6.  No agree to start here, use scan instead to agree and start your journey.
+7.  No channel hopping. Channel hopping is switching channels in quick manner.
+8.  No begging for help in the chat, use sav channel if you have a problem.
+9.  No real hacking stuff here, this is a roleplay server about hacknet.
+10. No use of everyone/here ping without permission.
+11. No text walls or a large paragraphs of text.
+12. Do not cause a nuisance in the server.
+13. Do not argue with staff.
+
+  To comply to the rules and start your journey throught the server simply type agree```"""
+
+@client.event
+async def on_message(message):
+	if not message.author.bot:
+		if message.channel.name == "log":
+			if message.content.lower() == "reload":
+				await client.close()
+			elif message.content.lower() == "repair":
+				for server in client.servers:
+					for channel in server.channels:
+						if channel.name == "lobby":
+							await client.purge_from(channel)
+							await client.send_message(channel, welcome)
+			elif message.content.lower() == "admin suspend":
+				for role in message.server.roles:
+					if role.name == "Admin":
+						await client.remove_roles(message.author, role)
+			elif message.content.lower() == "admin restore":
+				for role in message.server.roles:
+					if role.name == "Admin":
+						await client.add_roles(message.author, role)
+		elif message.channel.name == "lobby":
+			if message.content.lower() == "scan":
+				tmp = await Hacknet.execute(client,message)
+				await asyncio.sleep(10)
+				await client.delete_message(tmp)
+				await client.delete_message(message)
+			else:
+				tmp = await client.send_message(message.channel, "```diff\n--       --```")
+				await asyncio.sleep(0.1)
+				tmp = await client.edit_message(tmp, "```diff\n-- ERROR --```")
+				await asyncio.sleep(0.1)
+				tmp = await client.edit_message(tmp, "```diff\n--       --```")
+				await asyncio.sleep(0.1)
+				tmp = await client.edit_message(tmp, "```diff\n-- ERROR --```")
+				await asyncio.sleep(0.1)
+				tmp = await client.edit_message(tmp, "```diff\n--       --```")
+				await asyncio.sleep(0.1)
+				tmp = await client.edit_message(tmp, "```diff\n-- ERROR --```")
+				await asyncio.sleep(3.0)
+				await client.delete_message(tmp)
+				await client.delete_message(message)
+		elif message.channel.name not in channels["talk"]:
+			await Hacknet.execute(client,message)
+
+client.run(config.token)
